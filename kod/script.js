@@ -37,10 +37,26 @@ function showTeamInput(qtyOfTeams){
 /*
 FUNGERAR EJ. Varje lagnamn som angivits i respektive fält i diven .team-name ska sparas i variabler...
 */
+/*
 $("#start-game").click(function(){
-    $(".team-name").each((element) => {
-        console.log(element.id)
+    $(".team-name").each(function(value){
+        console.log(".team-name" + ':' + $(this).attr('id'));
+        // alternativt text() istället?
+        
+    });
+})
+*/
+
+
+// testade olika men får inget utskrivet värde i konsollen
+// endast " .team-name0: " osv
+$("#start-game").click(function(){
+    $(".team-name").each(function(index, value){
+        console.log(".team-name" + index + ':' + $(value).text());
         /* alternativt text istället? */
         
     });
 })
+
+
+
