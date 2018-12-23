@@ -112,6 +112,26 @@ section{
     display: none;
 }
 
+#start-game-div{
+    display: none;
+}
+
+#game-full-div{
+    display: none;
+}
+
+.team-score{
+    margin: 8px 50px;
+    box-sizing: border-box;
+    font-size: 25px; 
+    padding: 0.5%;
+    opacity: 0.8;
+    color: #ffffff;
+    background-color: rgba(a,a,a, 0);
+    border: 2px solid #ffffff;
+    border-radius: 20px;
+}
+
 /*
 Knappen för att starta spelet efter att lagnamnen skrivits in
 */
