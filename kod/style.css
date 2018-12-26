@@ -119,15 +119,24 @@ section {
   white-space: pre-line;
 }
 
+#game-teams-div{
+    border: 2px solid #1db954;
+    border-radius: 20px;
+    position: absolute;
+    right: -15px;  
+    font-size: 16px;
+
+}
+
 .team-score {
-  margin: 8px 50px;
+      
   box-sizing: border-box;
-  font-size: 25px;
+  font-size: 64px;
   padding: 0.5%;
   opacity: 0.8;
   color: #ffffff;
   background-color: rgba(a, a, a, 0);
-  border: 2px solid #ffffff;
+  border: 2px solid #1db954;
   border-radius: 20px;
 }
 

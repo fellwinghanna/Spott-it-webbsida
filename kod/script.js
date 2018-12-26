@@ -12,6 +12,7 @@ let nextApiSong;
 let hintLevel = 0;
 let volume = 0;
 let synth = window.speechSynthesis;
+let colors = ["red","green","blue","yellow", "pink" ];
 
 $(document).ready(function() {
   var hashToken = window.location.hash;
@@ -53,6 +54,7 @@ $("#submit-playlist").click(function() {
 Skapar diven som håller i inputfälten för lagnamnen, lika många som angivit i qtyOfTeams
 */
 function showTeamInput(qtyOfTeams) {
+
   for (var i = 1; i < parseInt(qtyOfTeams) + 1; i++) {
     var div = document.createElement("div");
     div.id = "team" + i;
@@ -60,37 +62,18 @@ function showTeamInput(qtyOfTeams) {
     document.getElementById("enter-team-name").appendChild(div);
 
     $("#" + div.id).html(
-      "<label for='team-name'>Lag namn " +
+
+      "<div id='team-shield" +
+      i +
+      "' class='fas fa-shield-alt'style='font-size:64px;color:"+colors[i-1]+"'></div><label for='team-name'>Lag namn " +
         i +
         ":</label> <input type='text' id='team-name" +
         i +
-        "' class='team-name team-name-required' placeholder='Ert roliga lagnamn'>"
+        "' class='team-name team-name-required' pattern='.{2,10}' placeholder='Ert roliga lagnamn'>"
     );
   }
 }
 
-/*
-Visar eller döljer "Starta spelet-knappen" om inte alla fält är korrekt ifyllda
-*/
-
-$(document).on("change keyup", ".team-name-required", function(e) {
-  let disabled = true;
-  $(".team-name-required").each(function() {
-    let value = this.value;
-    if (value && value.trim() != "") {
-      disabled = false;
-    } else {
-      disabled = true;
-      return false;
-    }
-  });
-
-  if (disabled) {
-    $("#start-game-div").hide();
-  } else {
-    $("#start-game-div").show();
-  }
-});
 
 /*
 När man trycker på start så skapas alla lagobjekten och pushas till teams-arrayen.
@@ -100,17 +83,20 @@ $("#start-game").click(function() {
   var numItems = $(".team-name").length;
   for (var i = 1; i <= numItems; i++) {
     var teamName = $("#team-name" + i).val();
+    let teamColor = $("#team-shield" + i).get(0);
+    console.log(teamColor);
     team = {
       teamId: i,
       teamName: teamName,
       points: 0,
-      stuff: ""
+      stuff: "",
+      teamColor: colors[i-1] 
     };
     teams.push(team);
   }
   $("#name-section").hide();
   createTeamDivs();
-  startFirstRound();
+  //startFirstRound();
   $("#game-full-div").show();
   $.when(getSpotifyVolume()).done(function(data) {
     volume = data.device.volume_percent;
@@ -130,13 +116,11 @@ function createTeamDivs() {
     });
 
     $("#" + div.id).html(
-      "<ul><li>" +
-        teams[i].teamName +
-        "</li><li><div id='team-" +
+      "<i class='fas fa-shield-alt'style='font-size:96px;color:"+teams[i].teamColor+"'></i><span id='team-" +
         (i + 1) +
         "-points'>" +
         teams[i].points +
-        "</div></li></ul>"
+        "</span>"
     );
   }
 }
@@ -316,3 +300,33 @@ let getApiSong = function(song) {
     data: {}
   });
 };
+
+
+/*
+Visar eller döljer "Starta spelet-knappen" om inte alla fält är korrekt ifyllda
+*/
+
+$(document).on("change keyup", ".team-name-required", function(e) {
+    let disabled = true;
+    $(".team-name-required").each(function() {
+      let value = this.value;
+      if (value && value.trim() != "") {
+        disabled = false;
+      } else {
+        disabled = true;
+        return false;
+      }
+    });
+  
+    if (disabled) {
+      $("#start-game-div").hide();
+    } else {
+      $("#start-game-div").show();
+    }
+  });
+  
+
+  /*
+  Hjälpfunctioner
+  */
+
