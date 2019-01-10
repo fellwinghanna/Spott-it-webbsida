@@ -116,7 +116,7 @@ section{
 Knappen för att starta spelet efter att lagnamnen skrivits in
 */
 #start-game{
-    /* display: none; */
+    display: none;
     float: right;
     margin: 0 auto;
     height: auto;

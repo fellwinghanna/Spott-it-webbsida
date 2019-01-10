@@ -1,8 +1,8 @@
-/*
+
 var playlistId;
 var qtyOfTeams;
-*/
 
+let teams = [];
 
 /* 
 Sparar url:en som skickats och antalet lag som angivits i variablerna playlistID och qtyOfTeams.
@@ -16,6 +16,7 @@ $("#submit-playlist").click(function(){
     showTeamInput(qtyOfTeams);
     $("#startQuiz").hide();
     $("#enter-team-name").show();
+    $("#start-game").show();
 
 });
 
@@ -34,27 +35,21 @@ function showTeamInput(qtyOfTeams){
 
 }
 
-/*
-FUNGERAR EJ. Varje lagnamn som angivits i respektive fält i diven .team-name ska sparas i variabler...
-*/
-/*
-$("#start-game").click(function(){
-    $(".team-name").each(function(value){
-        console.log(".team-name" + ':' + $(this).attr('id'));
-        // alternativt text() istället?
-        
-    });
-})
-*/
 
-
-// testade olika men får inget utskrivet värde i konsollen
-// endast " .team-name0: " osv
+// skrier ut i konsollen: .team-nameindex: angivet lagnamn 
+// skapar ett lag med lagnamn och initialt 0 poäng
 $("#start-game").click(function(){
-    $(".team-name").each(function(index, value){
-        console.log(".team-name" + index + ':' + $(value).text());
-        /* alternativt text istället? */
-        
+    value = $(this).val()
+    $(".team-name").each(function(index, element){
+        value = $(element).val();
+
+        team = [
+            teamName = value,
+            points = 0,
+            id = index
+        ]
+        teams.push(team)
+        console.log("team-name" + index + ':' + value);        
     });
 })
 
