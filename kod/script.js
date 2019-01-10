@@ -35,6 +35,30 @@ function showTeamInput(qtyOfTeams){
 
 }
 
+/*
+I "Enter-team-name" sidan
+Visar eller döljer "Starta spelet"-button. Dold sålänge alla fält inte är ifyllda
+*/
+$(document).on("change keyup", ".team-name-required", function(e) {
+    let disabled = true;
+    $(".team-name-required").each(function() {
+      let value = this.value;
+      if (value && value.trim() != "") {
+        disabled = false;
+      } else {
+        disabled = true;
+        return false;
+      }
+    });
+  
+    if (disabled) {
+      $("#start-game-div").hide();
+    } else {
+      $("#start-game-div").show();
+    }
+  });
+  
+
 // skrier ut i konsollen: .team-nameindex: angivet lagnamn 
 // skapar ett lag med lagnamn och initialt 0 poäng
 $("#start-game").click(function(){
