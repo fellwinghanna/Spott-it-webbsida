@@ -35,7 +35,6 @@ function showTeamInput(qtyOfTeams){
 
 }
 
-
 // skrier ut i konsollen: .team-nameindex: angivet lagnamn 
 // skapar ett lag med lagnamn och initialt 0 poäng
 $("#start-game").click(function(){
@@ -51,7 +50,16 @@ $("#start-game").click(function(){
         teams.push(team)
         console.log("team-name" + index + ':' + value);        
     });
-})
+});
 
+function displayScoreboard(teams){
+    for(var i=1;i<parseInt(qtyOfTeams)+1;i++){
+        var div = document.createElement("div");
+        div.id = "teamScore"+i;
+        div.className = "teams-scores";
+        document.getElementById("scoreboard").appendChild(div);
 
+        $("#"+div.id).html("");
+    }
+}
 

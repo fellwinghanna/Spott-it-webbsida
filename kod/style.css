@@ -36,7 +36,7 @@ Huvuddelen på sidan. Fast höjd för tillfället.
 */
 main{
     grid-area: main;
-    height: 700px;
+    height: 1200px;
     width: 100%;
     
 }
@@ -51,7 +51,7 @@ main > #startQuiz{
     box-sizing: border-box;
     align-items: center;
     margin: 0 auto;
-    width: 50%;
+    width: 60%;
 
 }
 
@@ -72,7 +72,7 @@ Stylar själva input fälten i formuläret
 Styling för url:inputen i formuläret 
 */
 #startQuiz > #playlist-url{
-    width: 80%;
+    width: 85%;
     box-sizing: border-box;
     background-color: rgba(0,0,0,0);
     border-left: none;
