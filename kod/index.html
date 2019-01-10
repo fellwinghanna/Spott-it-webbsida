@@ -64,6 +64,10 @@
             >
               <span class="fab fa-readme"></span>
             </button>
+            <label class="switch" alt="Play songs on spotify">
+              <input type="checkbox" id="playOnfSpotify" checked />
+              <span class="slider"></span>
+            </label>
           </div>
         </div>
       </header>
@@ -117,20 +121,45 @@
         </section>
         <!-- //section-->
 
-        <div class="container">
-          <div id="game-full-div"  class="row">
-            <div id="game-question-full">
-              <div id="game-header"></div>
-              <div id="game-gifs" class="col-md-4"></div>
-              <div id="game-lyrics" class="col-md-7"></div>
+        <div class="game-container">
+          <div class="row">
+            <div id="game-question-full" class="col col-md-9">
+              <div id="game-header" class="row"></div>
+              <div id="game-game" class="row">
+                <div id="game-gifs1" class="game-gifs col-md-2"></div>
+                <div
+                  id="game-lyrics-translated"
+                  class="col-md-4 game-lyrics"
+                ></div>
+                <div id="game-gifs2" class="game-gifs col-md-2"></div>
+                <div
+                  id="game-lyrics-original"
+                  class="col-md-4 game-lyrics"
+                ></div>
+              </div>
             </div>
-            <div id="game-teams-div" class="col-md-2">
-                <button id="next-song">Next Song</button>
-                <button id="next-hint">Next Hint</button>
-            </div>
+            <div id="game-teams-div" class="col col-md-2"></div>
           </div>
         </div>
-        
+        <div id="game-controller" class="row">
+          <div class="col col-md-4"></div>
+          <div class="col col-md-4">
+            <button id="next-song">Next Song</button>
+            <button id="next-hint">Next Hint</button>
+          </div>
+          <div class="col col-md-2">
+            <input
+              id="volumeSlider"
+              type="range"
+              min="1"
+              max="100"
+              step="1"
+              value="10"
+            />
+            <div id="volumeAmount"></div>
+          </div>
+          <div class="col col-md-2"></div>
+        </div>
       </main>
       <!-- //main-->
 
@@ -153,6 +182,7 @@
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
       crossorigin="anonymous"
     ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     --><script
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
