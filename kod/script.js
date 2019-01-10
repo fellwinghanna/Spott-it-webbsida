@@ -50,7 +50,12 @@ $("#start-game").click(function(){
         teams.push(team)
         console.log("team-name" + index + ':' + value);        
     });
+
+    $("#enter-team-name").hide();
+    $("#start-game").hide();
+
 });
+
 
 function displayScoreboard(teams){
     for(var i=1;i<parseInt(qtyOfTeams)+1;i++){
