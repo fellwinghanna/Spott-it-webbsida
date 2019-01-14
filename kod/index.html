@@ -2,10 +2,7 @@
 <html lang="sv">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="icon"
       type="image/icon"
@@ -32,8 +29,34 @@
       crossorigin="anonymous"
     />
   </head>
-
   <body>
+    <div id="modalScore" class="modal">
+      <!-- Modal content -->
+
+      <div class="modal-content">
+        <div class="modal-header"><h2>Rätt svar</h2></div>
+        <p class="modal-p" id="modal-answer"></p>
+        <div class="modal-header"><h2>Poängställning</h2></div>
+        <div id="score-board-modal" class="modal-table"></div>
+        <div class="modal-confirm">
+          <button id="cofirm-button" class="close">Bekräfta poäng</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modalResult" class="modal">
+      <!-- Modal content -->
+
+      <div class="modal-content">
+        <div class="modal-header"><h2>Resultat</h2></div>
+        <p class="modal-p" id="result-winner"></p>
+        <p class="modal-p" id="result-loser"></p>
+        <div class="modal-confirm">
+          <button id="restart-button" class="close">Nytt Spel</button>
+        </div>
+      </div>
+    </div>
+
     <div id="wrapper">
       <header>
         <div class="collapse bg-dark" id="navbarHeader">
@@ -64,119 +87,101 @@
             >
               <span class="fab fa-readme"></span>
             </button>
-            <label class="switch" alt="Play songs on spotify">
-              <input type="checkbox" id="playOnfSpotify" checked />
-              <span class="slider"></span>
-            </label>
           </div>
         </div>
       </header>
 
       <main>
-        <hr color="#1DB954" />
-        <div id="startQuiz">
-          <label for="playlist-url">Playlist URL:</label>
-          <input
-            type="text"
-            id="playlist-url"
-            name="playlist-url"
-            placeholder="Klistra in url:en för din spellista"
-            value="spotify:user:1180595245:playlist:3Nk0YSjsTMRWW5cklHxUfb"
-            requried
-          />
+        <div class="game-container">
+          <div id="startQuiz">
+            <label for="playlist-url">Playlist URL:</label>
+            <input
+              type="text"
+              id="playlist-url"
+              name="playlist-url"
+              placeholder="Klistra in url:en för din spellista"
+              value="spotify:user:1180595245:playlist:3UUAEnJE8iRty8KvUY1fNL"
+              requried
+            />
 
-          <label for="nr-of-teams">Antal lag:</label>
-          <input
-            type="number"
-            min="1"
-            max="5"
-            step="1"
-            id="nr-of-teams"
-            name="nr-of-teams"
-            value="1"
-            requried
-          />
-          <button
-            type="submit"
-            class="btn btn-primary btn-md"
-            class="btn btn-success"
-            id="submit-playlist"
-          >
-            Börja spela!
-          </button>
-        </div>
-        <!--// #startQuiz-->
-
-        <section id="name-section">
-          <div id="enter-team-name"></div>
-          <div id="start-game-div">
+            <label for="nr-of-teams">Antal lag:</label>
+            <input
+              type="number"
+              min="1"
+              max="5"
+              step="1"
+              id="nr-of-teams"
+              name="nr-of-teams"
+              value="1"
+              requried
+            />
             <button
-              id="start-game"
-              class="btn btn-primary btn-md"
-              class="btn btn-success"
+              type="submit"
+              class="btn btn-success btn-md"
+              id="submit-playlist"
             >
-              Starta!
+              Börja spela!
             </button>
           </div>
-        </section>
-        <!-- //section-->
-
-        <div class="game-container">
-          <div class="row">
-            <div id="game-question-full" class="col col-md-9">
-              <div id="game-header" class="row"></div>
-              <div id="game-game" class="row">
-                <div id="game-gifs1" class="game-gifs col-md-2"></div>
-                <div
-                  id="game-lyrics-translated"
-                  class="col-md-4 game-lyrics"
-                ></div>
-                <div id="game-gifs2" class="game-gifs col-md-2"></div>
-                <div
-                  id="game-lyrics-original"
-                  class="col-md-4 game-lyrics"
-                ></div>
-              </div>
+          <div id="name-container">
+            <div id="enter-team-name"></div>
+            <div id="start-game-div">
+              <button
+                id="start-game"
+                class="btn btn-primary btn-md"
+                class="btn btn-success"
+              >
+                Starta!
+              </button>
             </div>
-            <div id="game-teams-div" class="col col-md-2"></div>
           </div>
-        </div>
-        <div id="game-controller" class="row">
-          <div class="col col-md-4"></div>
-          <div class="col col-md-4">
-            <button id="next-song">Next Song</button>
-            <button id="next-hint">Next Hint</button>
+
+          <div class="game">
+            <div class="row">
+              <div id="game-question-full" class="col col-10">
+                <div id="game-header" class="hint"></div>
+                <div id="game-gifs" class="hint"></div>
+                <div id="game-lyrics-translated" class="hint"></div>
+                <div id="game-album-cover" class="hint"></div>
+              </div>
+              <div class="col col-2"><div id="game-teams-div"></div></div>
+            </div>
+            <div id="game-controller" class="row">
+              <div class="col-1" id="speaker">
+                <input type="checkbox" id="playOnfSpotify" checked />
+                <label for="playOnfSpotify" class="d-inline"></label>
+              </div>
+              <div class="col-2">
+                <input
+                  class="d-inline"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value="50"
+                  id="volumeSlider"
+                />
+              </div>
+
+              <div class="col-6 align-items-end">
+                <center><span id="time">30</span></center>
+              </div>
+
+              <div class="col-3 align-items-end">
+                <label for="next-song" id="next-song-label">Skip song</label>
+                <p id="next-song" class="fas fa-fast-forward"></p>
+
+                <label for="next-hint" id="next-hint-label">Next hint</label>
+                <p id="next-hint" class="fas fa-step-forward"></p>
+              </div>
+
+              <div></div>
+
+              <div></div>
+            </div>
           </div>
-          <div class="col col-md-2">
-            <input
-              id="volumeSlider"
-              type="range"
-              min="1"
-              max="100"
-              step="1"
-              value="10"
-            />
-            <div id="volumeAmount"></div>
-          </div>
-          <div class="col col-md-2"></div>
         </div>
       </main>
-      <!-- //main-->
-
-      <div class="border-green"></div>
-
-      <footer>
-        <hr color="#1DB954" />
-        <div class="border-green"></div>
-
-        <section><p>&copy; 2018</p></section>
-      </footer>
     </div>
-    <!-- #wrapper-->
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -184,12 +189,12 @@
     ></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    --><script
+--><script
       src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
       integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
       crossorigin="anonymous"
     ></script>
     <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    --><script src="script.js" type="text/javascript"></script>
+--><script src="script.js" type="text/javascript"></script>
   </body>
 </html>

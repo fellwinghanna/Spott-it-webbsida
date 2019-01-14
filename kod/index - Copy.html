@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/icon"
+      href="../bilder/iconfinder_26_939734.png"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=VT323"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+      integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
+      crossorigin="anonymous"
+    />
+    <title>Spott-it</title>
+
+    <!-- Bootstrap core CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+
+        <div class="modal-content">
+          <div class="modal-close"><span class="close">&times;</span></div>
+          <div class="modal-header">Poängställning</div>
+          <div id="score-board-modal" class="modal-table"></div>
+          <div class="modal-confirm">
+            <button class="close">Bekräfta poäng</button>
+          </div>
+        </div>
+      </div>
+
+      <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8 col-md-7 py-4">
+                <h4 class="text-white">Spelregler</h4>
+                <p class="text-muted">- När ett lag klickar...</p>
+                <h5 class="text-white">Krav</h5>
+                <p>* En spelare måste ha Spotify Premium</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+          <div class="container d-flex justify-content-between">
+            <a href="index.html" class="navbar-brand d-flex align-items-center">
+              <strong>SPOTT-it</strong></a
+            >
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarHeader"
+              aria-controls="navbarHeader"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="fab fa-readme"></span>
+            </button>
+            <label class="switch" alt="Play songs on spotify">
+              <input type="checkbox" id="playOnfSpotify" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <hr color="#1DB954" />
+        <div id="startQuiz">
+          <label for="playlist-url">Playlist URL:</label>
+          <input
+            type="text"
+            id="playlist-url"
+            name="playlist-url"
+            placeholder="Klistra in url:en för din spellista"
+            value="spotify:user:1180595245:playlist:34pdnu2k9cQHb5vzz21iPa"
+            requried
+          />
+
+          <label for="nr-of-teams">Antal lag:</label>
+          <input
+            type="number"
+            min="1"
+            max="5"
+            step="1"
+            id="nr-of-teams"
+            name="nr-of-teams"
+            value="1"
+            requried
+          />
+          <button
+            type="submit"
+            class="btn btn-success btn-md"
+            id="submit-playlist"
+          >
+            Börja spela!
+          </button>
+        </div>
+        <!--// #startQuiz-->
+
+        <section id="name-section">
+          <div id="enter-team-name"></div>
+          <div id="start-game-div">
+            <button
+              id="start-game"
+              class="btn btn-primary btn-md"
+              class="btn btn-success"
+            >
+              Starta!
+            </button>
+          </div>
+        </section>
+        <!-- //section-->
+
+        <div class="game-container">
+          <div id="game-question-full" class="col col-md-10">
+            <div id="game-header" class="row"></div>
+            <div id="game-gifs" class="row game-gifs d-inline-block"></div>
+            <div id="game-lyrics-translated" class="row game-lyrics"></div>
+            <div id="game-album-cover" class="row"></div>
+          </div>
+          <div id="game-teams-div" class="col col-md-2"></div>
+        </div>
+
+        <div id="game-controller" class="row">
+          <div class="col col-md-4"></div>
+          <div class="col col-md-4">
+            <button id="next-song">Next Song</button>
+            <button id="next-hint">Next Hint</button>
+          </div>
+          <div class="col col-md-2">
+            <input
+              id="volumeSlider"
+              type="range"
+              min="1"
+              max="100"
+              step="1"
+              value="10"
+            />
+            <div id="volumeAmount"></div>
+          </div>
+          <div class="col col-md-2"></div>
+        </div>
+      </main>
+      <!-- //main-->
+
+
+    </div>
+    <!-- #wrapper-->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    --><script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    --><script src="script.js" type="text/javascript"></script>
+  </body>
+</html>
