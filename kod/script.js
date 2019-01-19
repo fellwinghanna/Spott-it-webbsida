@@ -1,8 +1,3 @@
-/*
-var playlistId;
-var qtyOfTeams;
-*/
-
 let teams = [];
 let playlist = [];
 let qtyOfTeams = 0;
@@ -19,6 +14,11 @@ let playOnSpotify = 1;
 let songRound = 0;
 let roundTimer = 30;
 let interval;
+
+var modalScore = document.getElementById("modalScore");
+var modalResult = document.getElementById("modalResult");
+var confirmPoints = document.getElementById("cofirm-button");
+var restart = document.getElementById("restart-button");
 
 $(document).ready(function() {
   var hashToken = window.location.hash;
@@ -41,7 +41,6 @@ $("#submit-playlist").click(function() {
     playlistId = playlistId.substring(index + 9);
   }
   qtyOfTeams = $("#nr-of-teams").val();
-  console.log(playlistId, qtyOfTeams);
 
   createEnterTeamNameDivs(qtyOfTeams);
   $("#startQuiz").hide();
@@ -49,7 +48,6 @@ $("#submit-playlist").click(function() {
 
   $.get(
     "http://deepbet.se:8010/spottit-api/api/v1/playlist?id=" +
-      //"http://192.168.1.2:8010/spottit-api/api/v1/playlist?id=" +
       playlistId +
       "&accessToken=" +
       accessToken,
@@ -105,7 +103,6 @@ $("#start-game").click(function() {
   }
   $("#name-container").hide();
   createTeamDivs();
-  //startFirstRound();
   $(".game").show();
   $("#game-teams-div").show();
   $("#game-controller").show();
@@ -119,6 +116,9 @@ $("#start-game").click(function() {
   promise.then(doNextSong()).catch(err => console.log("1, Error", err));
 });
 
+/**
+ * Skapar divarna som visar poängen på högersida i spelet
+ */
 function createTeamDivs() {
   for (var i = 0; i < qtyOfTeams; i++) {
     let colWidth = Math.floor(12 / qtyOfTeams);
@@ -127,9 +127,6 @@ function createTeamDivs() {
     div.className = "team-score col-sm";
     document.getElementById("game-teams-div").appendChild(div);
     let teamId = teams[i].teamId;
-    div.addEventListener("click", function() {
-      updateScore(teamId, 1);
-    });
 
     $("#" + div.id).html(
       "<i class='fas fa-microphone-alt' style='font-size:76px;color:" +
@@ -143,6 +140,11 @@ function createTeamDivs() {
   }
 }
 
+/**
+ * Uppdaterar poängen för ett givet lag, både i lag-objektet och på sidan
+ * @param {teamId} teamId
+ * @param {antal poäng laget skall få} nbrOfPoints
+ */
 function updateScore(teamId, nbrOfPoints) {
   for (let i = 0; i < teams.length; i++) {
     if (teams[i].teamId === teamId) {
@@ -161,14 +163,16 @@ $("#next-song").click(function() {
   doNextSong();
 });
 
+/**
+ * Försöker byta till nästa låt
+ */
 let doNextSong = function() {
   let resolvedTest = true;
   songRound++;
-  let asdf = new Promise((resolve, reject) => {
+  let doNextPromise = new Promise((resolve, reject) => {
     nextSong()
       .then(data => console.log(data))
       .then(slideAndReset())
-
       .catch(() => {
         resolvedTest = false;
       });
@@ -181,6 +185,13 @@ let doNextSong = function() {
   });
 };
 
+/**
+ * Slide:ar bort alla divs och byter till nästa ledtråd.
+ * Stänger av eventuellt webläsaruppläsning
+ * Spelar upp den föregående låten
+ * Sätter spotifyVolymen rätt
+ *
+ */
 let slideAndReset = function() {
   return new Promise((resolve, reject) => {
     $("#game-question-full").hide(
@@ -190,7 +201,6 @@ let slideAndReset = function() {
       function() {
         resetGameDivs();
         hintLevel = 0;
-        //startTimer(roundTimer);
         playPreviousSong();
         synth.cancel();
         setSpotifyVolume(volume);
@@ -202,6 +212,9 @@ let slideAndReset = function() {
   });
 };
 
+/**
+ * Skapar ett promise på att nästa låt skall hämtas
+ */
 let nextSong = function() {
   return new Promise((resolve, reject) => {
     getSongs()
@@ -211,6 +224,11 @@ let nextSong = function() {
   });
 };
 
+/**
+ * Hämtar nästa låt. För att snabba upp spelet sparas 3 låtar samtidigt.
+ * Nästa låt som skall visas, nuvarande låt, samt den tidigare.
+ * Om det inte finns några fler låtar i playlisten visas resultatet
+ */
 const getSongs = function() {
   return new Promise((resolve, reject) => {
     if (playlist.songs.length > 0) {
@@ -246,9 +264,12 @@ const getSongs = function() {
   });
 };
 
+/**
+ * Gör ett api-anrop mot vårt api och hämtar all information om sången
+ * @param {song-objekt} song
+ */
 let getApiSong = function(song) {
   let url =
-    //"http://192.168.1.2:8010/spottit-api/api/v1/song?artist=" +
     "http://www.deepbet.se:8010/spottit-api/api/v1/song?artist=" +
     song.artist +
     "&title=" +
@@ -269,6 +290,10 @@ $("#next-hint").click(function() {
   nextHint();
 });
 
+/**
+ * Visar nästa ledtråd, startar Timer.
+ * Om man är på sista ledtråden visa scoreboard
+ */
 function nextHint() {
   clearInterval(interval);
   switch (hintLevel) {
@@ -314,6 +339,9 @@ function newTitle() {
   $("#game-header").html(currentApiSong.newTitle);
 }
 
+/*
+ *Spelar föregående låt på spotify
+ */
 function playPreviousSong() {
   if (playOnSpotify === 1 && previousApiSong != null) {
     var data = {
@@ -336,6 +364,9 @@ function playPreviousSong() {
   }
 }
 
+/**
+ * Hämta volymen från Spotify
+ */
 let getSpotifyVolume = function() {
   return $.ajax({
     url: "https://api.spotify.com/v1/me/player",
@@ -348,6 +379,10 @@ let getSpotifyVolume = function() {
   });
 };
 
+/**
+ * Sätt volymen i spotify
+ * @param {Volymen i spotify} volume
+ */
 let setSpotifyVolume = function(volume) {
   return $.ajax({
     url:
@@ -362,6 +397,10 @@ let setSpotifyVolume = function(volume) {
   });
 };
 
+/**
+ * Nollställer och döljer alla hint-divar
+ */
+
 function resetGameDivs() {
   $("#game-gifs").html("");
   $("#game-lyrics-translated").html("");
@@ -375,12 +414,14 @@ function resetGameDivs() {
   $("#game-album-cover").hide();
 }
 
+/**
+ * Sätter diven "game-gifs" till att innehålla alla gifar på nuvarande fråga
+ */
 function showGifs() {
   let gifHtml1 = "";
 
   if (currentApiSong != null) {
     if (currentApiSong.gifs.length > 0) {
-      console.log(currentApiSong.gifs);
       let nbrOfGifs = currentApiSong.gifs.length;
       let dynamicWidth = 100 / nbrOfGifs;
       let fixedWidth = 100 / 3;
@@ -405,13 +446,17 @@ function showGifs() {
   $("#game-gifs").html(gifHtml1);
 }
 
+/**
+ * Sätter diven "game-lyrics-translated" till att innehålladen översatta låttexten
+ */
 function showTransLyrics() {
   $("#game-lyrics-translated").html(currentApiSong.translatedLyrics);
 }
-function showOriginalLyrics() {
-  $("#game-lyrics-original").html(currentApiSong.originalLyrics);
-}
 
+/**
+ * Låter webläsaren läsa upp låttexten på originalspråk
+ * Sänker spotify-volymen under tiden, och höjer tillbaka när uppläsningen är klar
+ */
 function playLyrics() {
   $.when(getSpotifyVolume()).done(function(data) {
     volume = data.device.volume_percent;
@@ -424,11 +469,9 @@ function playLyrics() {
   };
 }
 
-function drawCurrentSong() {}
-
-/*
-  Hjälpfunctioner
-  */
+/**
+ * Sätter innehållet i diven "game-album-cover" till att innehålla nuvarande låts albumomslag
+ */
 function showCover() {
   let cover = "";
 
@@ -438,11 +481,9 @@ function showCover() {
 
   $("#game-album-cover").html(cover);
 }
-/*
-Eventlisteners
-  */
+
 $(document).ready(function() {
-  $(".switch :checkbox").change(function() {
+  $("#playOnfSpotify").change(function() {
     if (this.checked) {
       playOnSpotify = 1;
     } else {
@@ -483,8 +524,10 @@ $(document).on("change keyup", ".team-name-required", function(e) {
   }
 });
 
+/**
+ * Skapar scoreboarden, dvs den modal:en som kommer upp när varje låt avslutas
+ */
 function showScoreBoard() {
-  // When the user clicks the button, open the modal
   let points;
   let addPoints = [];
   modalScore.style.display = "block";
@@ -557,7 +600,6 @@ function showScoreBoard() {
       "</div>";
   }
   scoreTable += "</table>";
-  console.log(scoreTable);
 
   $("#score-board-modal").html(scoreTable);
   for (let i = 0; i < addPoints.length; i++) {
@@ -576,13 +618,6 @@ function showScoreBoard() {
     currentApiSong.artist + " - " + currentApiSong.songName
   );
 }
-var modalScore = document.getElementById("modalScore");
-var modalResult = document.getElementById("modalResult");
-// Get the <span> element that closes the modal
-
-var confirmPoints = document.getElementById("cofirm-button");
-var restart = document.getElementById("restart-button");
-// When the user clicks on <span> (x), close the modal
 
 confirmPoints.onclick = function() {
   modalScore.style.display = "none";
@@ -597,12 +632,19 @@ restart.onclick = function() {
   window.location.href = "http://deepbet.se/Spotify-redirect/";
 };
 
+/**
+ * Returnerar en färg, används för att skapa grön->rött i scoreboard
+ * @param {värde från 1-7} value
+ */
 function getColor(value) {
-  //value from 0 to 1
   var hue = ((1 - value) * 120).toString(10);
   return ["hsl(", hue, ",100%,50%)"].join("");
 }
 
+/**
+ * Startar nedräkningen för varje ledtråd
+ * @param {tiden man har på sig på varje ledtråd} duration
+ */
 function startTimer(duration) {
   if (songRound > 0 && hintLevel < 6) {
     var timer = duration;
@@ -619,6 +661,9 @@ function startTimer(duration) {
   }
 }
 
+/**
+ * Skapar resultat-modal:en som visas när spelat är slut
+ */
 function showResultModal() {
   let winnerPoints = 0;
   let winners = [];
@@ -631,7 +676,8 @@ function showResultModal() {
       winners.push(teams[i].teamName);
     } else if (teams[i].points == winnerPoints) {
       winners.push(teams[i].teamName);
-    } else if (teams[i].points < loserPoints) {
+    }
+    if (teams[i].points < loserPoints) {
       loserPoints = teams[i].points;
       losers = [];
       losers.push(teams[i].teamName);
@@ -652,6 +698,4 @@ function showResultModal() {
 
   $("#result-winner").text(winnersHtml);
   $("#result-loser").text(loserHtml);
-  console.log(winners);
-  console.log(losers);
 }
